@@ -46,4 +46,51 @@ fn main() {
     
     fn makes_copy(some_integer: i32) { // some_integer comes into scope
     } // some_integer goes out of scope
+
+    references();
+}
+
+fn references() {
+    {
+        let s1 = String::from("hello");
+        // s1 reference is passed to function
+        // references are immutable by default
+        let len = calculate_length(&s1);
+        // s1 is still valid here
+        println!("\nThe length of '{}' is {}.", s1, len);
+    }
+
+    fn calculate_length(s: &String) -> usize { // s is reference to a String
+        s.len() 
+    } // s goes out of scope, the value that reference was pointing at is not dropped yet
+
+    {
+        let mut s2 = String::from("Hello");
+        // passing mutable reference to a function
+        // can only have one mutable reference at a time
+        let ref_s2 = &mut s2;
+        change(ref_s2);
+
+        println!("{s2}");
+    }
+
+    {
+        let mut s3 = String::from("Hello");
+
+        // can have multiple immutable references
+        // must have multiple immutable or one mutable reference
+        // once mutable reference is used, use of immutable references will fail to compile
+        let ref_1 = &s3;
+        let ref_2 = &s3;
+        println!("{ref_1}");
+        println!("{ref_2}");
+
+        let ref_3 = &mut s3;
+        change(ref_3);
+        println!("{ref_3}");
+    }
+
+    fn change(some_string: &mut String) {
+        some_string.push_str(", world!");
+    }
 }
