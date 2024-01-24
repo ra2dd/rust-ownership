@@ -48,6 +48,7 @@ fn main() {
     } // some_integer goes out of scope
 
     references();
+    slices();
 }
 
 fn references() {
@@ -93,4 +94,51 @@ fn references() {
     fn change(some_string: &mut String) {
         some_string.push_str(", world!");
     }
+
+    // reference is only valid when the value it's referencing
+    // is in scope
+}
+
+fn slices() {
+    let mut s = String::from("hello world");
+    // creating a reference to certain part of the String
+    // first value is an starting index 
+    // second value - first value is a length
+    let hello = &s[0..5];
+    let world = &s[6..11];
+    println!("\n{} {}", hello, world);
+
+    // when creating slices one can omit indexes
+    // when its first or last character in a String 
+    let s2 = String::from("new string");
+    let new = &s2[..3];
+    let string = &s2[4..];
+    println!("{} {}", new, string);
+
+    // [..] references entire String
+    let new_string = &s2[..];
+    println!("{}", new_string);
+
+    // function for returning reference to a word
+    // in a String until a first space
+    fn first_word(s: &String) -> &str {
+        let bytes = s.as_bytes();
+
+        for(i, &item) in bytes.iter().enumerate() {
+            if item == b' ' {
+                return &s[0..i];
+            }
+        }
+
+        &s[..]
+    }
+
+    let first_word = first_word(&s);
+    println!("{}", first_word);
+
+    s = String::from("string changed");
+    // once value the slice is referencing changes
+    // the slice cannot longer be used
+    // because the program will fail to compile
+
 }
