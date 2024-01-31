@@ -121,7 +121,7 @@ fn slices() {
 
     // function for returning reference to a word
     // in a String until a first space
-    fn first_word(s: &String) -> &str {
+    fn first_word(s: &str) -> &str {
         let bytes = s.as_bytes();
 
         for(i, &item) in bytes.iter().enumerate() {
@@ -133,12 +133,31 @@ fn slices() {
         &s[..]
     }
 
-    let first_word = first_word(&s);
-    println!("{}", first_word);
+    let word = first_word(&s);
+    println!("The fist word using a function is:{}", word);
 
     s = String::from("string changed");
     // once value the slice is referencing changes
     // the slice cannot longer be used
     // because the program will fail to compile
 
+    let new_fw = first_word(&s[0..8]);
+    println!("The first word passing slice of the string as a parameter:{}", new_fw);
+
+    let string_literal = "immutable string";
+    let word = first_word(&string_literal[0..13]);
+    println!("The first word from string literal is:{}", word);
+
+    let word = first_word(string_literal);
+    println!(
+        "Passing string literal to a function accepting 
+        a reference to a string still works, 
+        because string literals are string 
+        slices already."
+    );
+
+    let a = [1, 2, 3, 4, 5];
+    let slice = &a[1..3];
+    // using pretty print :? to display slice
+    println!("Number array slice:{:?}", slice);
 }
